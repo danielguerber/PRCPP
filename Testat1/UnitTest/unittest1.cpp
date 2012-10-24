@@ -12,7 +12,7 @@ namespace UnitTest {
 			String s2("abc"); 
 			String s00(s0); 
 			String s11(s1); 
-			String s22(s2); 
+			String s22(s2);
 		}
 
 		TEST_METHOD(CharAt) {
@@ -57,10 +57,13 @@ namespace UnitTest {
 			String s1("def");
 			String s2("abcdef");
 			String s3;
+			String s4;
 
 			Assert::IsTrue(s2.compareTo(s0.concat(s1))==0);
 			Assert::IsTrue(s0.compareTo(s0.concat(s3))==0);
 			Assert::IsTrue(s0.compareTo(s3.concat(s0))==0);
+			s4 = s2.substring(3,5);
+			Assert::IsTrue(s2.compareTo(s0.concat(s4))==0);
 		}
 
 		TEST_METHOD(Length) { 

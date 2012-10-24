@@ -9,17 +9,23 @@ class String final {
 	size_t m_len;
 	size_t m_start;
 	std::shared_ptr<char> m_string;
+	
+	//Zuweisungsoperator privat um Unveränderbarkeit zu sichern
+	String operator = (const String&);
 public:
 	// öffentliche Methoden 
 	String();
 	String(const String &);
 	String(const char*);
+	String(String&& v);
+	~String();
+	String& operator=(String&& str);
 
 	// Instanz-Methoden 
 	char charAt(size_t index) const; // bei falschem Index: wirft exception 
 	int compareTo(const String& s) const; // C++ untypische Funktion: gibt -1, 0, 1 zurück 
 	String concat(char c) const; // hängt c ans Ende und gibt neuen String zurück 
-	String concat(const String& s) const; 
+	String concat(const String& s) const;  
 	size_t length() const; // gibt die Länge des Strings zurück 
 	// Substring des Bereichs [beg, end) 
 	// falls beg ≥ m_len oder end ≤ beg: gibt leeren String zurück 
@@ -29,6 +35,8 @@ public:
 
 	// Gleichheitsoperator (Inline-Implementation schon gegeben) 
 	bool operator==(const String& s) const { return compareTo(s) == 0; }
+
+
 
 	// Ausgabe-Operator für Output-Streams (Inline-Implementation schon gegeben) 
 	friend std::ostream& operator<<(std::ostream& os, const String& s) { 
