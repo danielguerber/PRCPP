@@ -40,7 +40,8 @@ public class Matrix {
 		return new Matrix(this.heigth, m.width, result);
 	}
 	
-	private void multiplyArray(double[] matrixA, double[] matrixB, double[] matrixC,int n,int m,int p) {
+	private double[] multiplyArray(double[] matrixA, double[] matrixB, int n,int m,int p) {
+		double[] matrixC = new double[n*p];
 		for (int iN = 0; iN < n; iN++)
 		  {
 			  for (int iP = 0; iP < p; iP++)
@@ -51,6 +52,7 @@ public class Matrix {
 				  matrixC[iN*p+iP]=sum;
 			  }
 		  }
+		return matrixC;
 	}
 	
 	private Matrix multiplyJava(Matrix m) {
@@ -60,7 +62,7 @@ public class Matrix {
 		double[] matrixA = this.matrix;
 		double[] matrixB = m.matrix; 
 
-		multiplyArray(matrixA, matrixB, matrixC, this.heigth, this.width, m.width);
+		matrixC=multiplyArray(matrixA, matrixB,  this.heigth, this.width, m.width);
 		
 		System.out.println("Java multiplication:\n" + (System.currentTimeMillis()-start) + " ms");
 		  
@@ -138,12 +140,9 @@ public class Matrix {
 		
 
 		System.arraycopy(this.matrix, 0, matrixR, 0, matrixR.length);
-		double[] matrixTemp = new double[this.heigth*this.width];
 		
-		for (int i = 0; i < k-1; i++) {
-			System.arraycopy(matrixR, 0, matrixTemp, 0, matrixTemp.length);
-			multiplyArray(matrixTemp, matrixTemp, matrixR, this.heigth,this.heigth,this.heigth);
-		}
+		for (int i = 0; i < k-1; i++) 
+			matrixR=multiplyArray(matrixR, this.matrix, this.heigth,this.heigth,this.heigth);
 
 		
 		System.out.println("Java power:\n" + (System.currentTimeMillis()-start) + " ms");

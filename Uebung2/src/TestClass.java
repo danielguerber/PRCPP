@@ -15,14 +15,14 @@ public class TestClass {
 	}
 	
 //	    C++(Debug) multiplication and JNI call:
-//		5950 ms
+//		6030 ms
 //		Java multiplication:
-//		3881 ms
+//		3921 ms
 //		The results are equal!
-//		C++(Debug) powers and JNI call:
-//		1291 ms
+//		C++(Debug) power and JNI call:
+//		1281 ms
 //		Java power:
-//		511 ms
+//		471 ms
 //		The results are equal!
 //		Matrix:
 //		|2.0	2.0	|
@@ -31,29 +31,30 @@ public class TestClass {
 //		Java power:
 //		0 ms
 //		Matrix:
-//		|128.0	128.0	|
-//		|128.0	128.0	|
+//		|32.0	32.0	|
+//		|32.0	32.0	|
 	
 	
 //		C++(Release) multiplication and JNI call:
-//		3901 ms
+//		3870 ms
 //		Java multiplication:
-//		3902 ms
+//		3891 ms
 //		The results are equal!
 //		C++(Release) power and JNI call:
 //		361 ms
 //		Java power:
-//		470 ms
+//		480 ms
 //		The results are equal!
 //		Matrix:
 //		|2.0	2.0	|
 //		|2.0	2.0	|
-//
+//	
 //		Java power:
 //		0 ms
 //		Matrix:
-//		|128.0	128.0	|
-//		|128.0	128.0	|
+//		|32.0	32.0	|
+//		|32.0	32.0	|
+
 	
 	
 	
