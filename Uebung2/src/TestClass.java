@@ -35,25 +35,26 @@ public class TestClass {
 //		|32.0	32.0	|
 	
 	
-//		C++(Release) multiplication and JNI call:
-//		3870 ms
+//	    C++(Release) multiplication and JNI call:
+//		3697 ms
 //		Java multiplication:
-//		3891 ms
+//		3729 ms
 //		The results are equal!
 //		C++(Release) power and JNI call:
-//		361 ms
+//		376 ms
 //		Java power:
-//		480 ms
+//		390 ms
 //		The results are equal!
 //		Matrix:
 //		|2.0	2.0	|
 //		|2.0	2.0	|
-//	
+//
 //		Java power:
 //		0 ms
 //		Matrix:
 //		|32.0	32.0	|
 //		|32.0	32.0	|
+
 
 	
 	

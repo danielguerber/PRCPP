@@ -40,19 +40,26 @@ public class Matrix {
 		return new Matrix(this.heigth, m.width, result);
 	}
 	
-	private double[] multiplyArray(double[] matrixA, double[] matrixB, int n,int m,int p) {
-		double[] matrixC = new double[n*p];
+	private void multiplyArray(double[] matrixA, double[] matrixB, double[] matrixC, int n,int m,int p) {
+		int indexA = 0;
+		int indexB = 0;
+		int indexC = 0;
+		
 		for (int iN = 0; iN < n; iN++)
 		  {
 			  for (int iP = 0; iP < p; iP++)
 			  {
 				  double sum = 0.0;
-				  for (int iM = 0; iM < m; iM++)
-					  sum+=matrixA[iN*m+iM]*matrixB[iM*p+iP];
-				  matrixC[iN*p+iP]=sum;
+				  for (int iM = 0; iM < m; iM++) {
+					  sum+=matrixA[indexA+iM]*matrixB[indexB+iP];
+					  indexB += p;
+				  }
+				  indexB = 0;
+				  matrixC[indexC+iP]=sum;
 			  }
+			  indexA += m;
+			  indexC += p;
 		  }
-		return matrixC;
 	}
 	
 	private Matrix multiplyJava(Matrix m) {
@@ -62,7 +69,7 @@ public class Matrix {
 		double[] matrixA = this.matrix;
 		double[] matrixB = m.matrix; 
 
-		matrixC=multiplyArray(matrixA, matrixB,  this.heigth, this.width, m.width);
+		multiplyArray(matrixA, matrixB, matrixC, this.heigth, this.width, m.width);
 		
 		System.out.println("Java multiplication:\n" + (System.currentTimeMillis()-start) + " ms");
 		  
@@ -137,14 +144,17 @@ public class Matrix {
 		long start = System.currentTimeMillis();
 		
 		double[] matrixR = new double[this.heigth*this.width];
-		
+		double[] matrixTemp = new double[this.heigth*this.width];
 
 		System.arraycopy(this.matrix, 0, matrixR, 0, matrixR.length);
 		
-		for (int i = 0; i < k-1; i++) 
-			matrixR=multiplyArray(matrixR, this.matrix, this.heigth,this.heigth,this.heigth);
+		for (int i = 0; i < k-1; i++) {
+			multiplyArray(matrixR, this.matrix, matrixTemp, this.heigth,this.heigth,this.heigth);
+			double[] matrixTemp2 = matrixTemp;
+			matrixTemp=matrixR;
+			matrixR=matrixTemp2;
+		}
 
-		
 		System.out.println("Java power:\n" + (System.currentTimeMillis()-start) + " ms");
 		  
 		return new Matrix(this.heigth, this.width, matrixR);

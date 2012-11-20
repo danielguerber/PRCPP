@@ -5,21 +5,26 @@
 
 using namespace std;
 
-jdouble* multiply(jdouble* matrixA, jdouble* matrixB, jint n, jint m, jint p) {
-	jdouble* matrixC = new jdouble[n*p];
+void multiply(jdouble* matrixA, jdouble* matrixB, jdouble* matrixC, jint n, jint m, jint p) {
+	int indexA = 0;
+	int indexB = 0;
+	int indexC = 0;
 
 	for (jint iN = 0; iN < n; iN++)
 	  {
 		  for (jint iP = 0; iP < p; iP++)
 		  {
 			  jdouble sum = 0.0;
-			  for (jint iM = 0; iM < m; iM++)
-				  sum+=matrixA[iN*m+iM]*matrixB[iM*p+iP];
-			  matrixC[iN*p+iP]=sum;
+			  for (jint iM = 0; iM < m; iM++) {
+				  sum+=matrixA[indexA+iM]*matrixB[indexB+iP];
+				  indexB += p;
+			  }
+			  indexB = 0;
+			  matrixC[indexC+iP]=sum;
 		  }
+		  indexA += m;
+		  indexC += p;
 	  }
-
-	 return matrixC;
 }
 
 JNIEXPORT void JNICALL Java_Matrix_multiplyC
@@ -30,16 +35,11 @@ JNIEXPORT void JNICALL Java_Matrix_multiplyC
 	jdouble* matrixB = env->GetDoubleArrayElements(arrayB,&isCopyB);
 	jdouble* matrixC = env->GetDoubleArrayElements(arrayC,&isCopyC);
 
-	jdouble* matrixR = multiply(matrixA, matrixB,n,m,p);
+	multiply(matrixA, matrixB, matrixC, n,m,p);
 
-	std::copy(matrixR, matrixR + (n*p), stdext::checked_array_iterator<jdouble*>( matrixC, m*m ));
-
-	if (isCopyA==JNI_TRUE)
-		env->ReleaseDoubleArrayElements(arrayA, matrixA, JNI_ABORT);
-	if (isCopyB==JNI_TRUE)
-		env->ReleaseDoubleArrayElements(arrayB, matrixB, JNI_ABORT);
-	if (isCopyC==JNI_TRUE)
-		env->ReleaseDoubleArrayElements(arrayC, matrixC, 0);
+	env->ReleaseDoubleArrayElements(arrayA, matrixA, JNI_ABORT);
+	env->ReleaseDoubleArrayElements(arrayB, matrixB, JNI_ABORT);
+	env->ReleaseDoubleArrayElements(arrayC, matrixC, 0);
 }
 
 JNIEXPORT void JNICALL Java_Matrix_powerC
@@ -49,16 +49,23 @@ JNIEXPORT void JNICALL Java_Matrix_powerC
 	jdouble* matrixM = env->GetDoubleArrayElements(arrayM,&isCopyM);
 	jdouble* matrixR = env->GetDoubleArrayElements(arrayR,&isCopyR);
 	jdouble* matrixTemp = new jdouble[m*m];
+	jdouble* matrixTemp2 = new jdouble[m*m];
 
 	std::copy(matrixM, matrixM + (m*m), stdext::checked_array_iterator<jdouble*>( matrixTemp, m*m ));
 
-	for (jint i = 0; i < k-1; i++)
-		matrixTemp = multiply(matrixTemp, matrixM, m,m,m);
+	for (jint i = 0; i < k-1; i++) {
+		multiply(matrixTemp, matrixM, matrixTemp2, m,m,m);
+		jdouble* tempPointer = matrixTemp;
+		matrixTemp = matrixTemp2;
+		matrixTemp2 = tempPointer;
+		tempPointer=nullptr;
+	}
 
 	std::copy(matrixTemp, matrixTemp + (m*m), stdext::checked_array_iterator<jdouble*>( matrixR, m*m ));
 
-	if (isCopyM==JNI_TRUE)
-		env->ReleaseDoubleArrayElements(arrayM, matrixM, JNI_ABORT);
-	if (isCopyR==JNI_TRUE)
-		env->ReleaseDoubleArrayElements(arrayR, matrixR, 0);
+	delete[] matrixTemp;
+	delete[] matrixTemp2;
+
+	env->ReleaseDoubleArrayElements(arrayM, matrixM, JNI_ABORT);
+	env->ReleaseDoubleArrayElements(arrayR, matrixR, 0);
 }
