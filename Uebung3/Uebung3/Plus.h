@@ -1,0 +1,3 @@
+class Plus<class T> {
+
+}
